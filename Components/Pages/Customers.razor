@@ -1,0 +1,53 @@
+﻿@page "/customer"
+@using SADFinalProject.Components.Managers
+@using SADFinalProject.Components.Models
+
+<h3>Customer</h3>
+
+<button id="addNew">Add new</button>
+
+<div>
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid black;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid black; padding: 8px;">ID</th>
+                <th style="border: 1px solid black; padding: 8px;">LAST</th>
+                <th style="border: 1px solid black; padding: 8px;">FIRST</th>
+                <th style="border: 1px solid black; padding: 8px;">PHONE</th>
+                <th style="border: 1px solid black; padding: 8px;">EMAIL</th>
+                <th style="border: 1px solid black; padding: 8px;">NOTES</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in CustomerList)
+            {
+                <tr>
+                    <td style="border: 1px solid black; padding: 8px;">@customer.Id</td>
+                    <td style="border: 1px solid black; padding: 8px;">@customer.LastName</td>
+                    <td style="border: 1px solid black; padding: 8px;">@customer.FirstName</td>
+                    <td style="border: 1px solid black; padding: 8px;">@customer.Phone</td>
+                    <td style="border: 1px solid black; padding: 8px;">@customer.Email</td>
+                    <td style="border: 1px solid black; padding: 8px;">@customer.Notes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private DBManager _dbManager = DBManager.INSTANCE;
+    private List<Customer> CustomerList = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCustomers();
+        isLoading = false;
+    }
+
+    private async Task LoadCustomers()
+    {
+        await _dbManager.LoadCustomers();
+        CustomerList = _dbManager.CustomerList;
+    }
+}
